@@ -1,0 +1,13 @@
+---
+- name: Install homebrew 
+  ansible.builtin.shell: |
+    /bin/bash -c "$(NONINTERACTIVE=1 curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  register: brewins_output
+- debug: var=brewins_output 
+
+- name: Test homebrew directive and eval homebrew path
+  ansible.builtin.shell: |
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/vagrant/.profile
+    test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+  register: brewtest_output
+- debug: var=brewtest_output 

@@ -1,0 +1,34 @@
+---
+- name: Install vim
+  community.general.homebrew:
+    name: vim
+    state: present
+  register: vim_output
+- debug: var=vim_output.changed_pkgs 
+
+- name: Create plugin list directory if it does not exist
+  ansible.builtin.file:
+    path: '{{ vim_plug_list_dir }}'
+    state: directory
+    mode: '0755'
+
+- name: Get plug.vim
+  ansible.builtin.command: curl -fLo {{ vim_plug_dest }} --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  register: plug_vim
+
+- name: Copy vimrc, backing up the original if it differs
+  ansible.builtin.copy:
+    src: assets/plugins.virmc
+    dest: '{{ vim_plug_list_file }}'
+    owner: vagrant
+    group: vagrant
+    mode: '0600'
+    backup: yes
+
+- name: Create a symbolic link
+  ansible.builtin.file:
+    src: '{{ vim_plug_list_file }}'
+    dest: ~/.vimrc
+    owner: vagrant
+    group: vagrant
+    state: link

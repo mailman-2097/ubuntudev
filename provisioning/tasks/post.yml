@@ -1,0 +1,7 @@
+---
+- name: Disable the firewall (since this is for local dev only).
+  become: yes
+  become_user: root
+  ansible.builtin.service:
+    name: ufw
+    state: stopped

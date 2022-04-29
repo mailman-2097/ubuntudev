@@ -1,27 +1,30 @@
 ---
-- name: Get software for apt repository management.
-  apt:
-    name:
-      - python-apt
-      - python-pycurl
-    state: present
+# - name: customize /etc/environment
+#   ansible.builtin.lineinfile:
+#     dest: "/etc/environment"
+#     state: present
+#     regexp: "^{{ item.key }}="
+#     line: "{{ item.key }}={{ item.value }}"
+#   with_items: "{{ os_environment }}"
 
-- name: Add ondrej repository for later versions of PHP.
-  apt_repository: repo='ppa:ondrej/php' update_cache=yes
-
-- name: "Install Apache, MySQL, PHP, and other dependencies."
-  apt:
-    name:
-      - acl
-      - git
-      - curl
-    state: present
-
-- name: Disable the firewall (since this is for local dev only).
-  service: name=ufw state=stopped
-
-- name: "Start Apache, MySQL, and PHP."
-  service: "name={{ item }} state=started enabled=yes"
+- name: Install general items
+  community.general.homebrew: name={{ item }} state=present
   with_items:
-    - apache2
-    - mysql
+    - go
+    - gcc@5
+  register: genins_output
+- debug: var=genins_output 
+
+- name: Install tfenv
+  community.general.homebrew:
+    name: tfenv
+    state: present
+  register: tfins_output
+- debug: var=tfins_output.changed_pkgs 
+
+- name: Install Latest TF
+  ansible.builtin.shell: |
+      tfenv install latest
+      tfenv use latest
+  register: tfenv_output
+- debug: var=tfenv_output.stdout_lines 

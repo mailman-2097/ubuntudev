@@ -1,0 +1,40 @@
+# get the SHA to compare in gihub ssh keys
+ssh-keygen -l -f ~/.ssh/id_ed25519.pub
+
+# Installs
+brew install go gcc@5
+brew install tfenv
+tfenv install latest
+tfenv use latest
+
+# create vim structure
+pushd ~/code/dotfiles
+mkdir -p vim/.vim/pack/start/plugins vim/.vim/pack/start/themes vim/.vim/pack/start/syntax vim/.vim/pack/themes/opt
+tree -a vim && stow -vt ~ vim
+pushd vim/.vim/pack/themes/opt
+git submodule add git@github.com:dracula/vim.git dracula
+popd
+
+pushd vim/.vim/pack/themes/opt
+git clone https://github.com/fatih/vim-go.git ~/.vim/pack/plugins/start/vim-go
+
+cat << EOT >> ~/.vimrc
+" theme should be installed in vim/.vim/pack/themes/opt folder
+packadd! dracula
+syntax enable
+colorscheme dracula
+EOT
+
+popd
+
+pushd vim/.vim/pack/themes/start
+git clone https://github.com/NLKNguyen/papercolor-theme.git papercolor-theme
+# vim-go needs gcc@5
+brew install gcc@5
+
+# Command to update the plugins, the submodule is a git module inside the repo
+git submodule update --remote --merge
+git commit
+
+
+git clone https://github.com/fatih/vim-go.git ~/.vim/pack/plugins/start/vim-go

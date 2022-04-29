@@ -1,16 +1,26 @@
 ---
-- hosts: all
+- hosts: localhost
+  gather_facts: yes
   become: yes
+  become_user: vagrant
 
   vars_files:
     - vars.yml
 
+  environment:
+    PATH: "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:{{ ansible_env.PATH }}:$PATH"
+
   pre_tasks:
     - name: Update apt cache if needed.
-      apt: update_cache=yes cache_valid_time=3600
+      apt: update_cache=yes cache_valid_time=86400
+      become: yes
 
   handlers:
     - import_tasks: handlers/handlers.yml
 
   tasks:
-    - import_tasks: tasks/brew.yml
+    - import_tasks: tasks/pre.yml
+    - import_tasks: tasks/common.yml
+    - import_tasks: tasks/post.yml
+    - import_tasks: tasks/vim-plug.yml
+    - import_tasks: tasks/zsh.yml

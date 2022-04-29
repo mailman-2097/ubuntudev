@@ -1,0 +1,44 @@
+---
+
+- name:  Install zsh via apt (not brew)
+  apt:
+    pkg:
+    - zsh
+  register: zsh_output_1
+- debug: var=zsh_output_1.stdout_lines 
+
+- name: Set ZSH
+  become: yes
+  become_user: root
+  ansible.builtin.shell: |
+      usermod -s $(which zsh) vagrant
+  register: zsh_output_2
+- debug: var=zsh_output_2.stdout_lines 
+
+- name: Install oh my zsh
+  ansible.builtin.git:
+    repo: https://github.com/ohmyzsh/ohmyzsh.git
+    dest: ~/.oh-my-zsh
+    depth: 1
+
+- name: Copy zshrc, backing up the original if it differs
+  ansible.builtin.copy:
+    src: ~/.oh-my-zsh/templates/zshrc.zsh-template
+    dest: ~/.zshrc
+    owner: vagrant
+    group: vagrant
+    mode: '0644'
+    backup: yes
+    remote_src: yes
+
+- name: Install spaceship prompt
+  git:
+    repo: https://github.com/spaceship-prompt/spaceship-prompt.git
+    dest: ~/.oh-my-zsh/custom/themes/spaceship-prompt
+    depth: 1
+
+- name: Enable spaceship theme
+  file:
+    src: ~/.oh-my-zsh/custom/themes/spaceship-prompt/spaceship.zsh-theme
+    dest: ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme
+    state: link

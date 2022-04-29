@@ -1,1 +1,15 @@
 ---
+brew_path: "/home/linuxbrew/.linuxbrew/bin/brew"
+
+pip_package: python3-pip
+pip_executable: "{{ 'pip3' if pip_package.startswith('python3') else 'pip' }}"
+pip_install_packages: []
+
+vim_plug_repo: "https://github.com/junegunn/vim-plug.git"
+vim_plug_dest: "{{ ansible_user_dir }}/.vim/autoload/plug.vim"
+vim_plug_list_dir: "{{ ansible_user_dir }}/.vim/config"
+vim_plug_list_file: "{{ vim_plug_list_dir }}/plugins.virmc"
+
+os_environment:
+  - key: PATH
+    value: /home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:{{ ansible_env.PATH }}:$PATH

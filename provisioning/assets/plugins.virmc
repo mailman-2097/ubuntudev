@@ -1,0 +1,41 @@
+" Run PlugInstall if there are missing plugins
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
+
+call plug#begin()
+Plug 'http://github.com/tpope/vim-surround' " Surrounding ysw)
+Plug 'https://github.com/preservim/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'https://github.com/tpope/vim-commentary' " For Commenting gcc & gc
+Plug 'pearofducks/ansible-vim'
+Plug 'sheerun/vim-polyglot'
+Plug 'trevordmiller/nova-vim' 
+Plug 'cocopon/iceberg.vim'
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+call plug#end()
+
+set background=dark
+"set background=light
+set t_Co=256
+colorscheme iceberg
+
+autocmd VimEnter * NERDTree
+filetype plugin indent on
+set autowrite
+set encoding=utf-8
+set hidden
+set laststatus=2
+set nocompatible
+set number
+set relativenumber
+syntax on
+
+nnoremap <Left>  :echoe "Use h"<CR>
+nnoremap <Right> :echoe "Use l"<CR>
+nnoremap <Up>    :echoe "Use k"<CR>
+nnoremap <Down>  :echoe "Use j"<CR>
+" ...and in insert mode
+inoremap <Left>  <ESC>:echoe "Use h"<CR>
+inoremap <Right> <ESC>:echoe "Use l"<CR>
+inoremap <Up>    <ESC>:echoe "Use k"<CR>
+inoremap <Down>  <ESC>:echoe "Use j"<CR>
