@@ -1,0 +1,12 @@
+---
+- name: Download brew script
+  get_url: 
+    url: https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh dest=/tmp/install.sh
+    
+- name: Execute the brew
+  shell: /tmp/install.sh
+
+- name: Remove the script
+  file: 
+    path: /tmp/install.sh 
+    state: absent
