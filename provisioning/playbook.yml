@@ -19,8 +19,8 @@
     - import_tasks: handlers/handlers.yml
 
   tasks:
-    - import_tasks: tasks/pre.yml
-    - import_tasks: tasks/common.yml
-    - import_tasks: tasks/post.yml
-    - import_tasks: tasks/vim-plug.yml
+    # - import_tasks: tasks/pre.yml
+    # - import_tasks: tasks/common.yml
+    # - import_tasks: tasks/post.yml
+    # - import_tasks: tasks/vim-plug.yml
     - import_tasks: tasks/zsh.yml

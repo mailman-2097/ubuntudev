@@ -1,6 +1,8 @@
 ---
 
 - name:  Install zsh via apt (not brew)
+  become: yes
+  become_user: root
   apt:
     pkg:
     - zsh
